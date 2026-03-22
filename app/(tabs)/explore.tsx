@@ -180,10 +180,10 @@ export default function RoomsScreen() {
             },
             { wins: 0, losses: 0, middle: 0, total: 0 }
           );
-          const total = totals.total || 1;
-          const winPct = Math.round((totals.wins / total) * 100);
-          const lossPct = Math.round((totals.losses / total) * 100);
-          const middlePct = Math.max(0, 100 - winPct - lossPct);
+          const total = totals.total;
+          const winPct = total ? Math.round((totals.wins / total) * 100) : 0;
+          const lossPct = total ? Math.round((totals.losses / total) * 100) : 0;
+          const middlePct = total ? Math.max(0, 100 - winPct - lossPct) : 0;
           return {
             id: member.user_id,
             name: member.display_name ?? 'Player',
@@ -255,10 +255,10 @@ export default function RoomsScreen() {
       </View>
 
       {roomStats.map((room) => {
-        const total = room.wins + room.losses + room.middle || 1;
-        const winPct = Math.round((room.wins / total) * 100);
-        const lossPct = Math.round((room.losses / total) * 100);
-        const middlePct = Math.max(0, 100 - winPct - lossPct);
+        const total = room.wins + room.losses + room.middle;
+        const winPct = total ? Math.round((room.wins / total) * 100) : 0;
+        const lossPct = total ? Math.round((room.losses / total) * 100) : 0;
+        const middlePct = total ? Math.max(0, 100 - winPct - lossPct) : 0;
 
         return (
           <View key={room.id} style={styles.roomCard}>

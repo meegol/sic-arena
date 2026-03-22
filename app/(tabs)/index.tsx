@@ -113,10 +113,10 @@ export default function DashboardScreen() {
       );
   }, [results, userId]);
 
-  const totalGames = totals.total || 1;
-  const winPct = Math.round((totals.wins / totalGames) * 100);
-  const lossPct = Math.round((totals.losses / totalGames) * 100);
-  const middlePct = Math.max(0, 100 - winPct - lossPct);
+  const totalGames = totals.total;
+  const winPct = totalGames ? Math.round((totals.wins / totalGames) * 100) : 0;
+  const lossPct = totalGames ? Math.round((totals.losses / totalGames) * 100) : 0;
+  const middlePct = totalGames ? Math.max(0, 100 - winPct - lossPct) : 0;
 
   const roomStats = useMemo(() => {
     return rooms.map((room) => {
@@ -155,13 +155,16 @@ export default function DashboardScreen() {
           { wins: 0, losses: 0, middle: 0, total: 0 }
         );
 
-        const total = stats.total || 1;
+        const total = stats.total;
+        const winPct = total ? Math.round((stats.wins / total) * 100) : 0;
+        const lossPct = total ? Math.round((stats.losses / total) * 100) : 0;
+        const middlePct = total ? Math.max(0, 100 - winPct - lossPct) : 0;
         return {
           id: member.user_id,
           name: member.display_name ?? 'Player',
-          winPct: Math.round((stats.wins / total) * 100),
-          lossPct: Math.round((stats.losses / total) * 100),
-          middlePct: Math.max(0, 100 - Math.round((stats.wins / total) * 100) - Math.round((stats.losses / total) * 100)),
+          winPct,
+          lossPct,
+          middlePct,
         };
       });
 
@@ -257,10 +260,10 @@ export default function DashboardScreen() {
 
       <View style={styles.roomList}>
         {roomStats.map((room) => {
-          const total = room.wins + room.losses + room.middle || 1;
-          const roomWin = Math.round((room.wins / total) * 100);
-          const roomLoss = Math.round((room.losses / total) * 100);
-          const roomMiddle = Math.max(0, 100 - roomWin - roomLoss);
+          const total = room.wins + room.losses + room.middle;
+          const roomWin = total ? Math.round((room.wins / total) * 100) : 0;
+          const roomLoss = total ? Math.round((room.losses / total) * 100) : 0;
+          const roomMiddle = total ? Math.max(0, 100 - roomWin - roomLoss) : 0;
 
           return (
             <View key={room.id} style={styles.roomCard}>
